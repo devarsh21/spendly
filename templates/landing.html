@@ -28,7 +28,7 @@
 
         <div class="lp-ctas">
             <a href="{{ url_for('register') }}" class="lp-btn">Create free account</a>
-            <a href="#" class="lp-btn">See how it works</a>
+            <a href="#" class="lp-btn" id="see-how-btn">See how it works</a>
         </div>
 
         <div class="lp-window">
@@ -107,4 +107,59 @@
     </div>
 </section>
 
+<!-- Video modal -->
+<div class="lp-modal-overlay" id="lp-modal" aria-hidden="true">
+    <div class="lp-modal-box" role="dialog" aria-modal="true">
+        <button class="lp-modal-close" id="lp-modal-close" aria-label="Close">&times;</button>
+        <div class="lp-video-wrap">
+            <iframe id="lp-video"
+                src=""
+                data-src="https://www.youtube.com/embed/dQw4w9WgXcQ?rel=0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen>
+            </iframe>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+(function () {
+    var btn      = document.getElementById('see-how-btn');
+    var modal    = document.getElementById('lp-modal');
+    var closeBtn = document.getElementById('lp-modal-close');
+    var iframe   = document.getElementById('lp-video');
+
+    function openModal() {
+        iframe.src = iframe.dataset.src;
+        modal.removeAttribute('aria-hidden');
+        modal.classList.add('lp-modal-open');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal() {
+        iframe.src = '';
+        modal.setAttribute('aria-hidden', 'true');
+        modal.classList.remove('lp-modal-open');
+        document.body.style.overflow = '';
+    }
+
+    btn.addEventListener('click', function (e) {
+        e.preventDefault();
+        openModal();
+    });
+
+    closeBtn.addEventListener('click', closeModal);
+
+    modal.addEventListener('click', function (e) {
+        if (e.target === modal) closeModal();
+    });
+
+    document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && !modal.hasAttribute('aria-hidden')) closeModal();
+    });
+})();
+</script>
 {% endblock %}
